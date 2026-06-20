@@ -12,7 +12,7 @@ using MusicApi.MusicApi.Infrastructure.Data;
 namespace MusicApi.MusicApi.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260620184646_InitialCreate")]
+    [Migration("20260620191626_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
