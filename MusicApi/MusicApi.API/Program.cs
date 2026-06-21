@@ -23,18 +23,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 
 var app = builder.Build();
-app.Use(async (context, next) =>
-{
-    try
-    {
-        await next();
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"CAUGHT: {ex.GetType().Name} - {ex.Message}");
-        throw;
-    }
-});
+
 
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseRouting();
