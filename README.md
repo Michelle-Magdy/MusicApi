@@ -284,3 +284,11 @@ playlist_songs                        ← Many-to-many junction table
 **Why a junction table?** One song (e.g. "Bohemian Rhapsody") can exist in thousands of playlists. A junction table stores only the relationship — not a copy of the song — so the database never has duplicate song data regardless of how many playlists reference it.
 
 
+**AI Usage**
+I used AI for :
+- suggesting code architecture
+- understanding the requirements
+- fixing bugs
+- Click the link to view conversation with Kimi AI Assistant https://www.kimi.com/share/19eebf87-a942-8cb2-8000-00008c17ee1c
+- https://gemini.google.com/share/d/1JMVcHSX4XchXi-24OabRfxQMmVyiiwg2?usp=sharing
+
