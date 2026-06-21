@@ -14,8 +14,14 @@ namespace MusicApi.MusicApi.Infrastructure.Data.Configurations
 
             builder.Property(playlist => playlist.CreatedAt)
                    .HasDefaultValueSql("GETUTCDATE()");
-        }
 
-        
+            // Map the collection to the private backing field
+            builder.Metadata.FindNavigation(nameof(PlayList.SongPlaylist))!
+                .SetPropertyAccessMode(PropertyAccessMode.Field);
+
+            builder.HasMany(p => p.SongPlaylist)
+                .WithOne( sp => sp.Playlist)
+                .HasForeignKey(sp => sp.PlaylistId);
+        }      
     }
 }

@@ -15,6 +15,10 @@ namespace MusicApi.MusicApi.Infrastructure.Data.Configurations
                 .HasMaxLength(50)
                 .IsRequired();
 
+            // Map to backing field
+            builder.Metadata.FindNavigation(nameof(Song.SongPlaylist))!
+                .SetPropertyAccessMode(PropertyAccessMode.Field);
+
             builder.Property(song => song.CreatedAt)
                 .HasDefaultValueSql("GETUTCDATE()");
         }

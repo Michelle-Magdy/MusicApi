@@ -6,16 +6,16 @@ namespace MusicApi.MusicApi.Application.DTOs
 {
     public static class MappingDTOs
     {
-        public static PlaylistResponseDTO toDto(this PlayList playlist) =>
+        public static PlaylistResponseDTO ToDto(this PlayList playlist) =>
             new()
             {
                 Id = playlist.Id,
                 Name = playlist.Name,
                 UserId = playlist.UserId,
-                Songs = playlist.SongPlaylist.Select(sp => sp.Song.toDto())
+                Songs = playlist.SongPlaylist.Select(sp => sp.Song.ToDto())
             };
 
-        public static SongResponseDTO toDto(this Song song) =>
+        public static SongResponseDTO ToDto(this Song song) =>
             new() { 
                 Id = song.Id,
                 Title = song.Title,
@@ -23,7 +23,7 @@ namespace MusicApi.MusicApi.Application.DTOs
             
             };
 
-        public static UserResponseDTO toDto(this User user) =>
+        public static UserResponseDTO ToDto(this User user) =>
             new() { 
                 Id = user.Id,
                 Name = user.Name,

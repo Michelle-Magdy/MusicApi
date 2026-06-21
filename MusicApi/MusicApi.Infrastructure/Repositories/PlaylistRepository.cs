@@ -51,14 +51,10 @@ namespace MusicApi.MusicApi.Infrastructure.Repositories
             await _dbContext.SaveChangesAsync(ct);
         }
 
-        public async Task UpdateAsync(PlayList playlist, CancellationToken ct = default)
+        public Task UpdateAsync(PlayList playlist, CancellationToken ct = default)
         {
-            await _dbContext.PlayLists
-                .Where(p => p.Id == playlist.Id)
-                .ExecuteUpdateAsync(setters => setters
-                    .SetProperty(p => p.Name, playlist.Name)
-                    .SetProperty(p => p.UpdatedAt, DateTime.UtcNow)
-                ,ct);
+            _dbContext.PlayLists.Update(playlist);
+            return Task.CompletedTask;
         }
     }
 }

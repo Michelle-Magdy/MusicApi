@@ -12,7 +12,7 @@ namespace MusicApi.MusicApi.Infrastructure.Data.Configurations
 
             // one-many with song table
             builder.HasOne(sp => sp.Song)
-                .WithMany(s => s.SongPlayList)
+                .WithMany(s => s.SongPlaylist)
                 .HasForeignKey(sp => sp.SongId);
 
             builder.HasOne(sp => sp.Playlist)

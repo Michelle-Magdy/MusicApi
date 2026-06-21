@@ -6,8 +6,8 @@ namespace MusicApi.MusicApi.Domain.Entities
     {
         public string Title { get; set; } = string.Empty;
         public string Artist { get; set; } = string.Empty;
-        private readonly List<SongPlayList> _songPlaylists = new();
-        public IReadOnlyCollection<SongPlayList> SongPlayList => _songPlaylists.AsReadOnly();
+        private readonly List<SongPlayList> _songPlaylist = new();
+        public IReadOnlyCollection<SongPlayList> SongPlaylist => _songPlaylist.AsReadOnly();
 
         private Song() { }
 
@@ -23,12 +23,14 @@ namespace MusicApi.MusicApi.Domain.Entities
                 throw new DomainException("Song should have an artist");
             }
 
-            return new Song { 
+            return new Song
+            {
                 Id = Guid.NewGuid(),
                 Title = title.Trim(),
                 Artist = artist.Trim(),
-                CreatedAt= DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow
             };
+        }
 
     }
 }

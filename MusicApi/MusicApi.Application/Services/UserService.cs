@@ -19,13 +19,13 @@ namespace MusicApi.MusicApi.Application.Services
             var user = User.create(userDto.Name,userDto.Email);
             await _userRepo.AddAsync(user, ct);
             await _userRepo.SaveChangesAsync(ct);
-            return user.toDto();
+            return user.ToDto();
         }
 
-        public async Task<UserResponseDTO> GetUserById(Guid id, CancellationToken ct = default)
+        public async Task<UserResponseDTO?> GetUserById(Guid id, CancellationToken ct = default)
         {
-            var user = await _userRepo.GetByIdAsync(id) ?? throw new NotFoundException("User",id);
-            return user.toDto();
+            var user = await _userRepo.GetByIdAsync(id);
+            return user?.ToDto();
         }
     }
 }

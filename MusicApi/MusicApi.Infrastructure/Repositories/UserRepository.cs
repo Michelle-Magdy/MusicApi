@@ -18,9 +18,14 @@ namespace MusicApi.MusicApi.Infrastructure.Repositories
             
         }
 
-        public async Task<bool> ExistsAsync(string email, CancellationToken ct = default)
+
+        public async Task<bool> ExistsByEmailAsync(string email, CancellationToken ct = default)
         {
             return await _context.Users.AnyAsync(u => u.Email == email, ct);
+        }
+
+        public async Task<bool> ExistsByIdAsync(Guid id, CancellationToken ct = default) { 
+             return await _context.Users.AnyAsync(u => u.Id == id, ct);
         }
 
         public async Task<User?> GetByIdAsync(Guid id, CancellationToken ct = default)

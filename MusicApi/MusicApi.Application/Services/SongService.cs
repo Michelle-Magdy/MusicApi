@@ -20,31 +20,32 @@ namespace MusicApi.MusicApi.Application.Services
             var song = Song.Create(createSongDTO.Title,createSongDTO.Artist);
             await _songRepo.AddAsync(song,ct);
             await _songRepo.SaveChangesAsync(ct);
-            return song.toDto();
+            return song.ToDto();
         }
 
 
         public async Task DeleteSong(Guid id, CancellationToken ct = default)
         {
             await _songRepo.DeleteAsync(id,ct);
+            await _songRepo.SaveChangesAsync(ct);
         }
 
-        public async Task<SongResponseDTO> GetSong(Guid id, CancellationToken ct = default)
+        public async Task<SongResponseDTO?> GetSong(Guid id, CancellationToken ct = default)
         {
-            var song = await _songRepo.GetByIdAsync(id, ct) ?? throw new NotFoundException("Song",id);
-            return song.toDto();
+            var song = await _songRepo.GetByIdAsync(id, ct);
+            return song?.ToDto();
         }
 
 
-        public async Task<SongResponseDTO> UpdateSong(UpdateSongDTO updateSongDTO, CancellationToken ct = default)
+        public async Task UpdateSong(Guid id,UpdateSongDTO updateSongDTO, CancellationToken ct = default)
         {
-            var song = await _songRepo.GetByIdAsync(updateSongDTO.Id,ct) ?? throw new NotFoundException("Song",updateSongDTO.Id);
+            var song = await _songRepo.GetByIdAsync(id,ct) ?? throw new NotFoundException("Song",id);
             song.Title = updateSongDTO.Title;
             song.Artist = updateSongDTO.Artist;
             song.UpdatedAt = DateTime.UtcNow;
 
             await _songRepo.SaveChangesAsync(ct);
-            return song.toDto();
+
         }
     }
 }

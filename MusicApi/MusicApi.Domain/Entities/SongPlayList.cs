@@ -3,10 +3,10 @@
     public class SongPlayList
     {
         public Guid PlaylistId { get; set; }
-        public required PlayList Playlist { get; set; }
+        public PlayList? Playlist { get; set; } = null;
 
         public Guid SongId { get; set;}
-        public required Song Song { get; set; }
+        public Song? Song { get; set; } = null;
 
         public DateTime AddedAt { get; set; } = DateTime.UtcNow;
 
