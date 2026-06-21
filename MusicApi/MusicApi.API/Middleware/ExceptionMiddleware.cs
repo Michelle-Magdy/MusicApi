@@ -1,6 +1,7 @@
 ﻿using MusicApi.MusicApi.Domain.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Hosting;
 using System.Text.Json;
 
 namespace MusicApi.MusicApi.API.Middleware
@@ -9,11 +10,13 @@ namespace MusicApi.MusicApi.API.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<ExceptionMiddleware> _logger;
+        private readonly IWebHostEnvironment _env;
 
-        public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
+        public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger, IWebHostEnvironment env)
         {
             _next = next;
             _logger = logger;
+            _env = env;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -75,8 +78,25 @@ namespace MusicApi.MusicApi.API.Middleware
                 context.Response.Clear();
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 context.Response.ContentType = "application/json";
-                var payload = new { error = "An error occurred" };
-                await context.Response.WriteAsJsonAsync(payload, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+
+                var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+
+                if (_env != null && _env.EnvironmentName == "Development")
+                {
+                    var payload = new
+                    {
+                        error = ex.Message,
+                        exception = ex.GetType().FullName,
+                        stackTrace = ex.StackTrace
+                    };
+
+                    await context.Response.WriteAsJsonAsync(payload, options);
+                }
+                else
+                {
+                    var payload = new { error = "An error occurred" };
+                    await context.Response.WriteAsJsonAsync(payload, options);
+                }
             }
         }
     }
