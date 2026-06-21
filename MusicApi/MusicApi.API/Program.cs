@@ -12,14 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // connect to database
-// Prefer explicit environment variables for sensitive values (DB_SERVER, DB_USER, DB_PASSWORD).
-// Falls back to the DefaultConnection from configuration if env vars are not present.
-
-var dbHost = Environment.GetEnvironmentVariable("DB_HOST"); // e.g. "localhost,1433" or "sqlserver"
-var dbName = Environment.GetEnvironmentVariable("DB_NAME");     // e.g. "sa"
-var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD"); // set via env var / secrets
-
-var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User ID=sa;Password={dbPassword};TrustServerCertificate=True;Encrypt=False;MultipleActiveResultSets=true";
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Missing ConnectionStrings:DefaultConnection configuration.");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString, sqlOptions => sqlOptions.EnableRetryOnFailure())
@@ -39,6 +33,11 @@ builder.Services.AddScoped<IPlaylistService, PlaylistService>();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await dbContext.Database.MigrateAsync();
+}
 
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseRouting();

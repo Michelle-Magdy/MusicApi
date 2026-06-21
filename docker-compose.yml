@@ -9,20 +9,22 @@ services:
       - "8001:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - DB_HOST=sqlserver
-      - DB_NAME=MusicDB
-      - DB_SA_PASSWORD=Admin123!
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=MusicDB;User Id=sa;Password=Admin123!;TrustServerCertificate=True;Encrypt=False;MultipleActiveResultSets=true
     depends_on:
-      - sqlserver
+      sqlserver:
+        condition: service_healthy
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: mssql_db
-    user: "10001:10001"
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=Admin123!
     ports:
       - "1434:1433"
-    volumes:
-      - ./sqldata:/var/opt/mssql/data  
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P 'Admin123!' -Q 'SELECT 1' || /opt/mssql-tools/bin/sqlcmd -C -S localhost -U sa -P 'Admin123!' -Q 'SELECT 1'"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s

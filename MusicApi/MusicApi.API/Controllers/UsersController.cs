@@ -18,7 +18,7 @@ namespace MusicApi.MusicApi.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateUserDTO userDto) { 
             var user = await _userService.CreateUser(userDto);
-            return CreatedAtAction(nameof(FindById),new {userId = user.Id,user});
+            return CreatedAtAction(nameof(FindById), new { userId = user.Id }, user);
         }
 
         [HttpGet("{userId:guid}")]
